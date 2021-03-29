@@ -1,14 +1,81 @@
-exports.up = async (knex) => {
-  await knex.schema
+exports.up = (knex) => {
+  return knex.schema
     .createTable('users', (users) => {
       users.increments('user_id')
-      users.string('user_username', 200).notNullable()
-      users.string('user_password', 200).notNullable()
-      users.string('user_email', 320).notNullable()
-      users.timestamps(false, true)
+      users.string('user_username').notNullable().unique()
+      users.string('user_password').notNullable()
+      users.string('user_email').notNullable()
     })
-}
+    .createTable('trucks', trucks=>{
+      trucks.increments('truck_id')
+      trucks.string('truck_name').notNullable()
+      trucks.string('cuisine_type').notNullable()
+      trucks.integer('user_id')
+        .unsigned()
+        .notNullable()
+        .references('user_id')
+        .inTable('users')
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE')
+    })
+    .createTable('menu', menu=>{
+      menu.increments('menu_id')
+      menu.string('menu_name')
+      menu.string('menu_description')
+      menu.integer('menu_price')
+      menu.integer('truck_id')
+        .unsigned()
+        .notNullable()
+        .references('truck_id')
+        .inTable('trucks')
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE')
+    })
+    .createTable('menu_ratings', tbl=>{
+      tbl.increments('menu_rating_id')
+      tbl.integer('menu_rating')
+      tbl.integer('user_id')
+        .unsigned()
+        .notNullable()
+        .references('user_id')
+        .inTable('users')
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE')
+        tbl.integer('truck_id')
+        .unsigned()
+        .notNullable()
+        .references('truck_id')
+        .inTable('trucks')
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE')
+    })
+    .createTable('truck_ratings', tbl=>{
+      tbl.increments('truck_rating_id')
+      tbl.string('truck_rating')
+      tbl.integer('user_id')
+        .unsigned()
+        .notNullable()
+        .references('user_id')
+        .inTable('users')
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE')
+        tbl.integer('truck_id')
+        .unsigned()
+        .notNullable()
+        .references('truck_id')
+        .inTable('trucks')
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE')
+    })
+  }
 
-exports.down = async (knex) => {
-  await knex.schema.dropTableIfExists('users')
+    
+
+exports.down = (knex) => {
+  return knex.schema
+  .dropTableIfExists('users')
+  .dropTableIfExists('trucks')
+  .dropTableIfExists('menu')
+  .dropTableIfExists('menu_ratings')
+  .dropTableIfExists('truck_ratings')
 }
