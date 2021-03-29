@@ -26,11 +26,26 @@ const sharedConfig = {
   migrations: { directory: './api/data/migrations' },
   seeds: { directory: './api/data/seeds' },
 }
-
+const testingConfig = {
+  client: 'sqlite3',
+  useNullAsDefault: true,
+  migrations: {
+    directory: './api/data/migrations',
+  },
+  seeds: {
+    directory: './api/data/seeds',
+  },
+  // this enables foreign keys in SQLite
+  pool: {
+    afterCreate: (conn, done) => {
+      conn.run('PRAGMA foreign_keys = ON', done)
+    },
+  },
+}
 module.exports = {
   development: {
-    ...sharedConfig,
-    connection: process.env.DEV_DATABASE_URL,
+    ...testingConfig,
+    connection: { filename: './api/data/foodtruck.db3'},
   },
   testing: {
     ...sharedConfig,
