@@ -35,7 +35,6 @@ const testingConfig = {
   seeds: {
     directory: './api/data/seeds',
   },
-  // this enables foreign keys in SQLite
   pool: {
     afterCreate: (conn, done) => {
       conn.run('PRAGMA foreign_keys = ON', done)

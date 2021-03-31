@@ -31,9 +31,35 @@ exports.up = (knex) => {
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
     })
+    .createTable("favorites", (favorites) => {
+      favorites.increments("favorite_id");
+      favorites
+        .integer("user_id")
+        .unsigned()
+        .notNullable()
+        .references("user_id")
+        .inTable("users")
+        .onDelete("CASCADE")
+        .onUpdate("CASCADE");
+      favorites
+        .integer("truck_id")
+        .unsigned()
+        .notNullable()
+        .references("truck_id")
+        .inTable("trucks")
+        .onDelete("CASCADE")
+        .onUpdate("CASCADE");
+    })
     .createTable('menu_ratings', tbl=>{
       tbl.increments('menu_rating_id')
       tbl.integer('menu_rating')
+      tbl.integer('menu_id')
+      .unsigned()
+      .notNullable()
+      .references('menu_id')
+      .inTable('menu')
+      .onUpdate('CASCADE')
+      .onDelete('CASCADE')
       tbl.integer('user_id')
         .unsigned()
         .notNullable()
@@ -73,9 +99,10 @@ exports.up = (knex) => {
 
 exports.down = (knex) => {
   return knex.schema
-  .dropTableIfExists('users')
-  .dropTableIfExists('trucks')
-  .dropTableIfExists('menu')
-  .dropTableIfExists('menu_ratings')
   .dropTableIfExists('truck_ratings')
+  .dropTableIfExists('menu_ratings')
+  .dropTableIfExists('favorites')
+  .dropTableIfExists('menu')
+  .dropTableIfExists('trucks')
+  .dropTableIfExists('users')
 }
