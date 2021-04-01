@@ -15,7 +15,7 @@ server.use(helmet())
 server.use(cors())
 
 server.use('/api/auth', AuthRouter)
-server.use('/api/users',restricted, UserRouter)
+server.use('/api/users', restricted, UserRouter)
 server.use('/api/trucks', restricted, TruckRouter)
 server.use('/api/menu', restricted, MenuRouter)
 

@@ -15,7 +15,6 @@ async function findById(truck_id) {
     .first()
 
     const menuItem = await trucksMenu(truck_id)
-        console.log(truck)
     if(!truck){
         return truck
     } else {
@@ -24,10 +23,6 @@ async function findById(truck_id) {
             menu: menuItem
         }
     }
-    // return {
-    //     ...truck,
-    //     menu: menuItem
-    // }
 }
 
 function trucksMenu(truck_id){

@@ -16,7 +16,7 @@ const checkTruckId = (req, res, next) =>{
         })
 }
 const checkTruckBody = (req, res, next) =>{
-    const {truck_name, cuisine_type, user_id} = req.params
+    const {truck_name, cuisine_type, user_id} = req.body
     if(!truck_name || !cuisine_type || !user_id){
         res.status(400).json({
             message: 'You must include truck name, cusinie type, and user Id'
