@@ -25,7 +25,6 @@ router.post("/register", checkIfUsernameIsTaken, (req, res, next) => {
   });
   router.post("/login", checkIfUsernameExists, (req, res, next) => {
     const { user_username, user_password } = req.body
-    console.log(req.body)
       Users.findBy({user_username: user_username})
         .then((user)=>{
           if(user && bcryptjs.compareSync(user_password, user.user_password)){

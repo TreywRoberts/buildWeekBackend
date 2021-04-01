@@ -25,7 +25,23 @@ const checkTruckBody = (req, res, next) =>{
         next()
     }
 }
+const checkFavoriteId = (req, res, next) =>{
+    const {favorite_id} = req.params
+    Trucks.findByFavoriteId(favorite_id)
+        .then(favoriteId=>{
+            if(!favoriteId){
+                res.status(400).json({message: 'There is not exsiting favorite with this ID'})
+            } else {
+                req.favoriteId = favoriteId
+                next()
+            }
+        })
+        .catch(err=>{
+            next(err)
+        })
+}
 module.exports = {
     checkTruckId,
-    checkTruckBody
+    checkTruckBody,
+    checkFavoriteId
 }

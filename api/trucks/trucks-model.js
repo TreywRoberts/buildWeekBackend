@@ -36,7 +36,8 @@ function trucksMenu(truck_id){
         .where('t.truck_id', truck_id)
 }
 const create = async (truck) => {
-    const [id] = await db('trucks').insert(truck, ['truck_id', 'truck_name', 'cuisine_type', 'user_id'])
+    const [id] = await db('trucks')
+    .insert(truck, ['truck_id', 'truck_name', 'cuisine_type', 'user_id'])
     return findById(id)
   } 
   
@@ -51,12 +52,31 @@ const create = async (truck) => {
     return toBeRemoved
   }
 
+  const createFavorite = async (favorite) =>{
+      const [id] = await db('favorites')
+      .insert(favorite, ['favorite_id', 'user_id', 'truck_id'])
+      console.log(favorite)
+      return findById(favorite.truck_id)
+  }
+
+  const removeFavorite = async (favorite_id, truck_id)=>{
+    const toBeRemoved = findByFavoriteId(favorite_id)
+    await db('favorites').where({favorite_id}).del()
+    return findById(truck_id)
+  }
+  const findByFavoriteId = (favorite_id)=>{
+      return db('favorites').where({favorite_id}).first()
+  }
+
 module.exports = {
     findAllTrucks,
     findById,
     create,
     update,
-    remove
+    remove,
+    findByFavoriteId,
+    createFavorite,
+    removeFavorite
 }
 
 
